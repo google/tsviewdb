@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8">
+
+  <title>TSViewDB: Time-Series Viewer</title>
+  <link href="tsviewdb.css" rel="stylesheet">
+  <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/themes/base/jquery-ui.css" rel="stylesheet">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+  <script src="head.js"></script>
+
+<div id="pageheader" class="hide-for-all-embed">
+    <div class="logo">
+      <div id="tsview-title">
+        TSViewDB
+      </div>
+    </div>
+
+    <div id="headerlinks">
+      <a href="#" id="embed-1" title="Select for embeddable aggregate-only graph.">1 graph</a> | <a href="#" id="embed-3" title="Select for embeddable interactive graph">3 graphs</a> | <a href=
+      "//github.com/google/tsviewdb">Help</a>
+    </div>
+
+    <div id="search-div">
+      <form id="search-form" action="search" method="get" title=
+      "Type &lt;benchmark substring&gt;/&lt;experiment substring&gt; for data source search. Use +benchmark/experiment to add another graph (comma-separated list for more than one).">
+        Data Source Search: <input type="text" id="search-input-box" name="q" size="40"> <span id="spinner" style="display:none;">searching...</span>
+      </form>
+    </div>
+  </div>
+  <span id="loading-spinner" style="display:none;">Loading...</span>
+
+  <div id="main-graph">
+    <div id="uber-graph">
+
+      <div id="data-range-widgets" class="hide-for-all-embed">
+        <div id="last-pts-title" class="last-pts">
+        Last Records
+        </div>
+
+        <div id="date-widget" class="hide-for-last-pts">
+          <div id="date-control">
+            <div id="date-selected-range" title="Use to select date range by calendar. Push 'load...' button to requery. Alternative to date range slider on right.">
+              <input type="text" id="date-from" name="date-from"> <input type="text" id="date-to" name="date-to">
+            </div>
+
+            <div id="date-slider" title="Drag slider from center to move, or from handles to resize. Push 'load...' button to requery by date range. Alternative to calendar date picker on left."></div>
+
+            <div id="date-scale-message" title="Press to requery by selected date range. Ctrl-click to force an uncached load.">
+              <input type="button" id="date-scale-requery" value="load relative dates">
+            </div>
+
+            <div id="date-scale-buttons">
+              <input type="button" id="date-scale-left" value="&larr;" title="Press to shift date range slider scale backwards by one month.">
+
+              <input type="button" id="date-scale-right" value="&rarr;" title="Press to shift date range slider scale forward by one month.">
+            </div>
+          </div>
+
+          <div id="date-slider-scale"></div><br>
+        </div>
+      </div>
+
+      <div id="aggregate-resize-button-div" class="hide-for-all-embed">
+        <input type="button" id="aggregate-resize-button" value="+" title="Press to toggle the aggregate graph between full-size (samples and histogram graphs not shown) and normal size.">
+      </div>
+
+      <div id="graphs-container">
+        <div id="outer-graph">
+          <div id="agg-chart"></div><br style="clear: both;">
+        </div>
+
+        <div id="outer-graph2" class="hide-for-1-embed">
+          <div id="raw-chart"></div><br style="clear: both;">
+
+          <div id="instant-info"></div>
+        </div>
+
+        <div id="outer-graph3" class="hide-for-1-embed">
+          <div id="histo-chart"></div><br style="clear: both;">
+        </div>
+        <br style="clear: both;">
+      </div>
+
+      <div id="lower-thirds" class="hide-for-all-embed">
+      </div><!-- lower-thirds -->
+      <br style="clear: both;">
+    </div><!-- uber-graph -->
+
+    <div id="button-column" class="hide-for-all-embed">
+      <div class="button-section-title">
+        Aggregates
+      </div>
+
+      <div id="sliders">
+        <div id="line-slider" title="Set the aggregate for the line plot."></div>
+
+        <div id="shadow-slider" title="Set the aggregate for the shadow plot."></div>
+
+        <div id="slider-text">
+          <div>
+            max
+          </div>
+
+          <div>
+            99<span class="tiny-text">%</span>
+          </div>
+
+          <div>
+            95<span class="tiny-text">%</span>
+          </div>
+
+          <div>
+            90<span class="tiny-text">%</span>
+          </div>
+
+          <div>
+            75<span class="tiny-text">%</span>
+          </div>
+
+          <div>
+            <i>mean</i>
+          </div>
+
+          <div>
+            50<span class="tiny-text">%</span>
+          </div>
+
+          <div>
+            25<span class="tiny-text">%</span>
+          </div>
+
+          <div>
+            10<span class="tiny-text">%</span>
+          </div>
+
+          <div>
+            5<span class="tiny-text">%</span>
+          </div>
+
+          <div>
+            1<span class="tiny-text">%</span>
+          </div>
+
+          <div>
+            min
+          </div>
+        </div><br style="clear: both;">
+      </div><!-- sliders -->
+
+      <div class="button-section-title">
+        Query
+      </div>
+
+      <div id="query-change">
+        <input type="button" id="query-change-button" value="range" class="query-button panel-button" title=
+        "Press to select querying for max records in the selected range."> <input type="button" id="query-change-button-opposite" value="last 15" class=
+        "query-button panel-button" title="Press to select the last N records for all time.">
+      </div><br>
+
+      <div class="button-section-title">
+        Scale
+      </div>
+
+      <div id="scale-change">
+<!-- TODO: RE-ENABLE (TEMPORARILY DISABLED TILL THIS FUNCTIONALITY IS CONNECTED).
+        <b>X:</b> <input type="button" id="time-xscale-button" value="time" class="scale-button panel-button" title="Push to select X axis with units of time."> <input type=
+        "button" id="time-xscale-button-opposite" value="CL" class="scale-button panel-button" title="Push to select X-axis with given units."><input type="button" id=
+        "time-xscale-button-cl" value="CL" class="scale-button panel-button" title="Push to select X-axis with units of CL."><br>
+        <span style="visibility:hidden;">X:</span> <input type="button" id="equal-xscale-button" value="variable" class="scale-button panel-button" title=
+        "Push to select variably-spaced X-axis markers."> <input type="button" id="equal-xscale-button-opposite" value="equal" class="scale-button panel-button" title=
+        "Push to select fixed-spaced X-axis markers."><br>
+-->
+        <b>Y:</b> <input type="button" id="logscale-button" value="linear" class="scale-button panel-button" title=
+        "Push to select a linear-scale Y-axis.."> <input type="button" id="logscale-button-opposite" value="log" class=
+        "scale-button panel-button" title="Push to select a log-scale Y-axis. Will not work if any negative values are present.">
+      </div><br>
+
+      <div class="button-section-title">
+        Metrics
+      </div>
+
+      <div id="metric-change">
+        <input type="button" id="stack-button" value="separated" class="metric-button panel-button" title=
+        "Press to select separated graphs."> <input type="button" id="stack-button-opposite" value="stacked" class=
+        "metric-button panel-button" title="Press to select stacked graphs. Will not work when there are gaps in the data.">
+      </div>
+
+      <div id="metric-search-box-div">
+        <form id="metric-search-form" title="Type a metric fragment to filter the metric list in real-time. Press &lt;return&gt; to toggle all filtered metrics.">
+          filter:<input type="text" id="metric-search-input-box" name="metric-search-input-box-name" size="15">
+        </form>
+      </div>
+
+      <div id="metric-buttons"></div><br>
+      <br>
+
+      <div id="configs-div">
+        <div id="enabled-configs">
+          <div class="button-section-title">
+            Enabled Config Filters
+          </div><input type="button" id="clear-url-config-button" value="Clear all filters">
+
+          <div id="configs-list"></div>
+        </div>
+
+        <div class="button-section-title">
+          Add Config Filters
+        </div>
+
+        <div class="button-instructions">
+          ('=' to show all)
+        </div><input type="text" id="config-search" name="config-search-name" title=
+        "Enter config key or value fragment to show matching list. Enter '=' to show all. Press return to add chosen config to filter list."><br>
+
+        <div id="only-if-have-list">
+          <br>
+          <span id="new-filter-title">New filters:</span> <input type="button" id="submit-config-button" value="Redraw w/new filters"><br>
+          <input type="button" id="clear-config-button" value="Clear new list">
+
+          <div id="selected-filters" class="tiny-text"></div>
+        </div>
+      </div><!-- configs-div -->
+    </div><!-- button-column -->
+
+    <br style="clear: both;">
+  </div><!-- main-graph -->
+  <script src="tail.js"></script>

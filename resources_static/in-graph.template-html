@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<meta charset=utf-8>
+<title>TSView Inline Graph</title>
+<script src=/dygraph-compiled.js></script>
+<style type="text/css">
+    #graphdiv {
+      position: absolute;
+      left: 10px;
+      right: 10px;
+      top: 10px;
+      bottom: 10px;
+    }</style>
+<div id="graphdiv"></div>
+<script>
+  g = new Dygraph(document.getElementById("graphdiv"),
+	  {{.Data}},
+	  {
+  		labels: {{.ColumnNames}},
+  		xlabel: {{.XLabel}},
+      axes: {
+        x: {  // We know x is an epoch date, so set the appropriate options.
+          valueFormatter: Dygraph.dateString_,
+          axisLabelFormatter: Dygraph.dateAxisFormatter,
+          ticker: Dygraph.dateTicker
+        }
+      },
+      rollPeriod: 1,
+      showRoller: false,
+      strokeWidth: 1.5,
+      highlightCircleSize: 4,
+      includeZero: true,
+      rightGap: 0,
+      highlightSeriesBackgroundAlpha: 1,
+      animatedZooms: true,
+      connectSeparatedPoints: true,
+      customBars: {{.ShowShadow}}
+    });
+</script>

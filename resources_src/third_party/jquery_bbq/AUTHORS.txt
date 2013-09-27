@@ -1,0 +1,4 @@
+jQuery BBQ 1.2.1 Authors (http://benalman.com/projects/jquery-bbq-plugin/)
+
+Robert Penner
+George McGinley Smith

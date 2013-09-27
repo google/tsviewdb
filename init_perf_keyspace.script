@@ -1,0 +1,38 @@
+/*
+   Invoke this script on a Cassandra server using:
+     bin/cassandra-cli -f $PATH_TO_SCRIPT
+*/
+
+create keyspace perf;
+use perf;
+
+/* children: tsviewdb.SourceInfo */
+create column family children
+  with key_validation_class = 'UTF8Type'
+  and comparator = 'UTF8Type'
+  and default_validation_class = 'BytesType';
+
+/* aggregates: tsviewdb.Aggregation */
+create column family aggregates
+   with key_validation_class = 'UTF8Type'
+   and comparator = 'UTF8Type'
+   and default_validation_class = 'BytesType';
+
+/* points: tsviewdb.Points */
+create column family points
+   with key_validation_class = 'UTF8Type'
+   and comparator = 'UTF8Type'
+   and default_validation_class = 'BytesType';
+
+/* configs: string */
+create column family configs
+   with key_validation_class = 'UTF8Type'
+   and comparator = 'UTF8Type'
+   and default_validation_class = 'UTF8Type';
+
+/* source: string */
+create column family source
+   with key_validation_class = 'UTF8Type'
+   and comparator = 'UTF8Type'
+   and default_validation_class = 'UTF8Type';
+

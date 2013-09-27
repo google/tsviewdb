@@ -1,0 +1,499 @@
+/*
+Copyright 2013 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+body {
+  font-family: arial, sans-serif;
+}
+
+.logo {
+  float: left;
+  top: -5px;
+  position: relative;
+  width: 175px;
+}
+
+#headerlinks {
+  position: absolute;
+  right: 10px;
+  text-align: right;
+  font-size: small;
+}
+
+#pageheader {
+  height: 38px;
+  padding: 0 10px;
+}
+
+#tsview-title {
+  position: relative;
+  top: 10px;
+  color: rgba(102, 102, 153, 0.8);
+  font-size: 24px;
+  font-weight: bold;
+  display: inline;
+  margin-left: 3px;
+}
+
+#search-div {
+  position: absolute;
+  width: 500px;
+  top: 14px;
+  left: 180px;
+}
+
+#search-form {
+  position: relative;
+  display: inline;
+  font-size: small;
+}
+
+#main-graph {
+  position: relative;
+  top: 10px;
+}
+
+#button-column {
+  position: relative;
+  z-index: 20;
+  width: 165px;
+  float: left;
+}
+
+#uber-graph {
+  width: 100%;
+  top: -5px;
+  position: absolute;
+  overflow: hidden;
+}
+
+#graphs-container {
+  margin-left: 165px;
+  margin-right: 10px;
+  margin-top: 16px;
+}
+
+#outer-graph {
+  border: 1px solid grey;
+  position: relative;
+  margin-top: 4px;
+  left: 10px;
+}
+
+#data-range-widgets {
+  margin-left: 165px;
+}
+
+#date-control {
+  margin-left: 10px;
+  position: relative;
+  width: 920px;
+}
+
+#date-selected-range {
+  font-size: small;
+  margin-top: -5px;
+  float: left;
+  width: 66px;
+  height: 30px;
+}
+
+#date-slider {
+  margin-left: 15px;
+  height: 10px;
+  width: 680px;
+  float: left;
+}
+
+#date-scale-message {
+  position: relative;
+  font-size: small;
+  left: 19px;
+  top: -6px;
+  float: left;
+}
+
+#date-scale-buttons {
+  position: absolute;
+  top: 18px;
+  left: 804px;
+  width: 90px;
+}
+
+#date-scale-left,
+#date-scale-right {
+  display: inline-block;
+  padding: 0px 8px 1px 8px;
+}
+
+#date-slider-scale {
+  position: relative;
+  font-size: small;
+  margin-top: 7px;
+  margin-left: 85px;
+  top: 16px;
+  height: 10px;
+  width: 680px;
+}
+
+#sliders {
+  float: none;
+  position: relative;
+  left: 10px;
+  bottom: 5px;
+  width: 100px;
+  height: 215px;
+}
+
+#line-slider {
+  float: left;
+  position: relative;
+  top: 10px;
+  left: 5px;
+  height: 175px;
+  width: 6px;
+}
+
+#shadow-slider {
+  float: left;
+  position: relative;
+  top: 10px;
+  left: 15px;
+  height: 175px;
+  width: 6px;
+}
+
+.ui-widget-content {
+  background: white !important;
+}
+
+.ui-widget-header {
+  background: #ccc !important;
+}
+
+.ui-slider-handle {
+  width: 14px !important;
+  background-color: hsl(240, 20%, 50%) !important;
+  background-image: none !important;
+}
+
+#date-slider .ui-slider-handle {
+  width: 20px !important;
+  height: 17px !important;
+}
+
+.date-slider-handle-light {
+  background-color: hsl(240, 20%, 70%) !important;
+}
+
+#date-slider .ui-slider-range {
+  top: -4px;
+  height: 17px !important;
+  background-color: hsl(240, 20%, 80%) !important;
+  background-image: none;
+}
+
+#slider-text {
+  float: left;
+  position: relative;
+  top: 8px;
+  left: 25px;
+  font-size: small;
+  text-align: right;
+}
+
+#last-pts-title {
+  position: absolute;
+  margin-left: 20px;
+  top: 22px;
+  font-weight: bold;
+  font-size: medium;
+  color: #888;
+}
+
+#loading-spinner {
+  position: fixed;
+  top: 2px;
+  left: 50%;
+  margin-left: -35px;
+  padding-left: 2px;
+  padding-right: 1px;
+  display: none;
+  font-weight: normal;
+  background-color: #A3A3C2;
+  font-size: medium;
+  z-index: 20;
+}
+
+#scale-change,
+#metric-change,
+#query-change {
+  position: relative;
+  top: 0;
+  font-size: small;
+}
+
+.ui-autocomplete {
+  z-index: 20 !important;
+}
+
+.ui-datepicker {
+  background: hsl(0, 0%, 84%);
+  z-index: 100 !important;
+  font-size: small !important;
+}
+
+.ui-datepicker-current-day {
+  background-color: #669 !important;
+  background-image: none;
+}
+
+.selected-aggregate-line {
+  background-color: hsl(0, 0%, 68%) !important;
+}
+
+.selected-aggregate-shadow {
+  background-color: hsl(0, 0%, 84%);
+}
+
+#outer-graph2 {
+  border: 1px solid grey;
+  position: relative;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+}
+
+#instant-info {
+  position: relative;
+  left: 20px;
+  bottom: 5px;
+  max-width: 1400px;
+  word-wrap: break-word;
+  font-size: x-small;
+}
+
+#outer-graph3 {
+  border: 1px solid grey;
+  position: relative;
+  top: 20px;
+  left: 10px;
+}
+
+#agg-chart {
+  margin: 8px 8px 0;
+}
+
+#agg-chart input[type=text],
+#raw-chart input[type=text],
+#histo-chart input[type=text] {
+  width: 1em;
+  font-size: x-small;
+}
+
+#raw-chart,
+#histo-chart {
+  margin: 8px;
+}
+
+#search-results {
+  position: relative;
+  left: 190px;
+}
+
+#search-results-title {
+  color: rgb(153, 153, 153);
+}
+
+/* Used for Dygraph. */
+.graph-label-text {
+  font-size: small;
+  font-weight: normal;
+}
+
+#spinner {
+  position: relative;
+  font-size: small;
+}
+
+#lower-thirds {
+  margin-left: 185px;
+}
+
+.user-functions-title {
+  font-weight: bold;
+  width: 300px;
+}
+
+/* For metric buttons. */
+.hi-on-hover:hover {
+  background-color: #e0e0f0;
+}
+
+#metric-buttons-selectors {
+  position: relative;
+  top: 10px;
+  max-width: 300px;
+  max-height: 325px;
+  overflow: auto;
+  white-space: nowrap;
+  font-size: small;
+}
+
+.button-section-title {
+  background-color: rgba(211,211,211,0.55);
+  font-size: small;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.button-pressed {
+  background-color: #669 !important;
+  color: white;
+  border-style: inset;
+}
+
+.button-pressed:hover {
+  background-color: #77a !important;
+}
+
+input[type=button] {
+  background-color: #e3e3e3;
+  border-radius: 5px;
+  -webkit-appearance: push-button;
+}
+
+input[type=button]:hover {
+  background-color: #d5d5d5;
+  -webkit-appearance: push-button;
+}
+
+#aggregate-resize-button-div {
+  position: absolute;
+  left: 175px;
+  top: 51px;
+  z-index: 20;
+}
+
+#aggregate-resize-button {
+  font-size: x-small;
+  padding: 0 1px 1px;
+}
+
+#query-change {
+  margin-left: 14px;
+}
+
+.metric-button {
+  width: 70px;
+}
+
+#metric-change {
+  margin-left: 8px;
+}
+
+#metric-search-box-div {
+  font-size: small;
+  margin-bottom: 8px;
+  margin-top: 4px;
+}
+
+.src-id-title {
+  font-weight: bold;
+}
+
+.greyed-out {
+  opacity: .5;
+}
+
+.py-comment {
+  color: hsl(0, 0%, 70%);
+}
+
+.ui-menu-item {
+  font-size: x-small;
+  background-color: hsl(200, 70%, 90%);
+}
+
+.ui-menu-item .ui-state-focus {
+  background-color: hsl(133, 100%, 60%) !important;
+  background-image: none !important;
+}
+
+#configs-div {
+  overflow-x: auto;
+  display: none;
+}
+
+#configs-list {
+  margin-top: -8px;
+}
+
+#enabled-configs,
+.last-pts,
+#only-if-have-list,
+#user-functions-help {
+  display: none;
+}
+
+#selected-filters {
+  min-width: 100px;
+  max-width: 300px;
+}
+
+img,
+.ui-datepicker-calendar {
+  border: none;
+}
+
+#date-from,
+#date-to {
+  width: 56px;
+}
+
+/* Graph label title used for Dygraph. */
+.graph-label-title,
+.dygraph-ylabel,
+.dygraph-xlabel,
+.dygraph-axis-label,
+#metric-buttons,
+#new-filter-title {
+  font-size: small;
+}
+
+.query-button,
+.scale-button {
+  width: 60px;
+}
+
+#time-xscale-button-opposite {
+  padding-left: 1px;
+}
+
+#time-xscale-button-cl {
+  width: 20px;
+  margin-left: 2px;
+  padding-left: 1px;
+}
+
+.dygraph-legend {
+  font-size: x-small !important;
+  text-align: right !important;
+}
+
+.button-instructions,
+.tiny-text {
+  font-size: x-small;
+}

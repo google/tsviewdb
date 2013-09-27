@@ -1,0 +1,222 @@
+/*
+Copyright 2013 Google Inc. All Rights Reserved.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+
+syntax = "proto2";
+package tsviewdb;
+
+enum DataType {
+  INT64 = 0;
+  SCALED1 = 1;  // int64 scaled by 1/10
+  SCALED2 = 2;  // int64 scaled by 1/100
+  SCALED3 = 3;  // int64 scaled by 1/1000
+  DOUBLE = 15;  // 15 is the max tag that can be represented with one byte.
+}
+
+// For the "aggregates:" column family.
+message Aggregation {
+  // We use of a union of messages below, resulting in the repetition here, to
+  // give us a potentially very compact encoding.  A message made up of lots of
+  // unions takes up 2x the space compared to a union of messages of basic types
+  // (because the former needs at-minimum a 2-byte message wrapper for every
+  // field).
+  // Additionally we use many predefined fields instead of two parallel packed
+  // arrays (which have smaller in-memory footprint) because lookup speed is
+  // critical for our inner loops where we lookup a known set of aggregates.
+  // Serialized size would be the same for either.
+
+  // A fixed point type whose fractional scale is determined by the type field.
+  message AggregationScaled {
+    optional int64 count = 1;
+    optional int64 min = 2;
+    optional int64 max = 3;
+    optional int64 mean = 4;
+    optional int64 stdev = 5;
+    // Percentiles: one every 5%, except first and last.
+    optional int64 p99 = 6;
+    optional int64 p95 = 7;
+    optional int64 p90 = 8;
+    optional int64 p85 = 15;  // Not common.
+    optional int64 p80 = 16;  // Not common.
+    optional int64 p75 = 9;
+    optional int64 p70 = 17;  // Not common.
+    optional int64 p65 = 18;  // Not common.
+    optional int64 p60 = 19;  // Not common.
+    optional int64 p55 = 20;  // Not common.
+    optional int64 p50 = 10;
+    optional int64 p45 = 21;  // Not common.
+    optional int64 p40 = 22;  // Not common.
+    optional int64 p35 = 23;  // Not common.
+    optional int64 p30 = 24;  // Not common.
+    optional int64 p25 = 11;
+    optional int64 p20 = 25;  // Not common.
+    optional int64 p15 = 26;  // Not common.
+    optional int64 p10 = 12;
+    optional int64 p5 = 13;
+    optional int64 p1 = 14;
+  }
+
+  message AggregationDouble {
+    optional double count = 1;  // Admittedly not a double.
+    optional double min = 2;
+    optional double max = 3;
+    optional double mean = 4;
+    optional double stdev = 5;
+    // Percentiles: one every 5%, except first and last.
+    optional double p99 = 6;
+    optional double p95 = 7;
+    optional double p90 = 8;
+    optional double p85 = 15;  // Not common.
+    optional double p80 = 16;  // Not common.
+    optional double p75 = 9;
+    optional double p70 = 17;  // Not common.
+    optional double p65 = 18;  // Not common.
+    optional double p60 = 19;  // Not common.
+    optional double p55 = 20;  // Not common.
+    optional double p50 = 10;
+    optional double p45 = 21;  // Not common.
+    optional double p40 = 22;  // Not common.
+    optional double p35 = 23;  // Not common.
+    optional double p30 = 24;  // Not common.
+    optional double p25 = 11;
+    optional double p20 = 25;  // Not common.
+    optional double p15 = 26;  // Not common.
+    optional double p10 = 12;
+    optional double p5 = 13;
+    optional double p1 = 14;
+  }
+
+  optional DataType type = 1 [default = SCALED1];
+  optional AggregationScaled scaled = 2;  // Union: set only one.
+  optional AggregationDouble double = 3;  // Union: set only one.
+}
+
+// For the "points:" column family.
+message Points {
+  optional DataType type = 1 [default = SCALED1];
+  // Points are stored sorted by timestamp.
+
+  // For space efficiency scaled types are stored as deltas after the first
+  // value.  These are sint's to keep the encoded delta varint's small.
+  repeated sint64 delta_values_scaled = 2 [packed=true];  // Union.
+  repeated double values_double = 3 [packed=true];  // Union: set only one.
+
+  // For space efficiency timestamps are stored as deltas after the first value.
+  repeated int64 delta_timestamps = 6 [packed=true];  // Millisecs.
+}
+
+// For the "children:" column family.
+message SourceInfo {
+  repeated string units_map = 1;  // Map from index to unit.
+
+  repeated string metric_names = 2;  // required
+  repeated int32 units_indices = 3 [packed=true];  // Indices into units_map.
+  repeated bool select_for_defaults = 4;
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////
+// CURRENTLY UNUSED AFTER THIS LINE
+////////////////////////////////////////////////////////////////////////////////
+
+// For the "expires:" column.
+message Expires {
+  // TTL in secs after which the row may be deleted.
+  optional int32 row_ttl_in_secs = 1;
+  // TTL in secs after which the points may be deleted.  Note if this is longer
+  // than row_ttl_in_secs, then the whole row will be deleted and this value
+  // will have no effect.
+  optional int32 points_ttl_in_secs = 2;
+}
+
+message Config {
+  optional string name = 1;  // required
+  optional string value = 2;  // required
+}
+
+// For reads w/detailed info.
+message Table {
+  repeated string src_name_map = 1;  // Map from index to src name.
+  repeated string metric_name_map = 2;  // Map from index to metric name.
+  repeated Config config_pair_map = 3;  // Map from index to name/value pair.
+  message Configs {
+    // Indices into config_pair_map.
+    repeated int32 config_pair_indices = 1 [packed=true];
+  }
+  // Map from index to groups of Configs.
+  repeated Configs config_group_map = 4;
+
+  // Dynamic columns: src/metric or src/metric/aggregates per column.
+  // If src_indices is unset, this means that there is only one source.  There
+  // must be then only one entry in src_name_map.
+  // Required if more than one source.
+  repeated int32 src_indices = 5 [packed=true];
+  // If metric_indices is unset, and src_indices is unset or contains only one
+  // entry, then the metrics are in the order given by metric_name_map.
+  // Required if more than one source.
+  repeated int32 metric_indices = 6 [packed=true];
+
+  // Fixed column values (one value per row):
+  // For space efficiency timestamps are stored as deltas after the first value.
+  // Note that the rows may not be sorted by time.  The deltas may be negative.
+  // Even with a random sort, this saves considerable space:
+  // Noting that the 1st byte has a sign bit, in 4 bytes we can encode:
+  //   64 * 128 * 128 * 128 = 134217728 milliseconds differences
+  //   134217728 / (3600 * 1000) = 37 days of differences
+  // With 5 bytes we can encode:
+  //   64 * 128 * 128 * 128 * 128 / (3600 * 1000 * 365) = 13 years of diff.
+  // This is a saving of more than 1/3rd compared to int64 (5 bytes vs 8).  And
+  // a savings of 1/2 when sorted by time in the typical case (4 bytes vs 8).
+  repeated sint64 delta_timestamps = 7 [packed=true];  // Millisecs.  Required.
+
+  message Row {
+    repeated string id_map = 1;  // Map from index to ID.
+
+    // Dynamic column values (one per src/metric):
+    // If only one entry in id_map then this field can be unset to signify
+    // that all entries share the same ID.  This saves space for the case where
+    // the whole row is from a single ID.
+    repeated int32 id_indices = 2 [packed=true];  // Indices into id_map.
+    repeated Aggregation aggregations = 3;
+
+    // Points cannot be set if individual aggregates are selected.
+    repeated Points points = 6;
+    // 1-based Indices into config_group_map.  0 means no configs.  If any
+    // configs are present, then values for all columns need to be defined.
+    // This is more space-efficient than wrapping points/aggregations/configs in
+    // another message: 2bytes/cell (message wrap) vs. 1byte/cell (packed
+    // parallel array only).
+    repeated int32 config_group_indices = 7 [packed=true];
+  }
+
+  repeated Row rows = 8;
+}
+
+// For writes.
+message SingleSrcRow {  // Row for a single data source.
+  optional string src_name = 1;  // Required.
+  optional int64 timestamp = 2;  // Millisecs.  Required.
+  optional string id = 3;
+
+  message Cell {
+    optional string metric_name = 1;  // Required.
+    optional Aggregation aggregations = 2;
+    optional Points points = 3;
+  }
+  repeated Cell row = 5;
+
+  repeated Config configs = 6;
+}

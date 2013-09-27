@@ -1,0 +1,15 @@
+URL: http://github.com/cowboy/jquery-bbq/raw/v1.2.1/jquery.ba-bbq.js
+Version: 1.2.1
+License: MIT (also dual-licensed under GPL v2)
+License File: LICENSE
+
+Description:
+jQuery BBQ leverages the HTML5 hashchange event to allow simple, yet powerful
+bookmarkable #hash history. In addition, jQuery BBQ provides a full .deparam()
+method, along with both hash state management, and fragment / query string
+parse and merge utility methods.
+
+This library includes the hashchange library from the same author.
+
+Local Modifications:
+No Modifications

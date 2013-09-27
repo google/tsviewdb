@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+
+<meta charset="utf-8">
+
+  <title>TSViewDB: Time-Series Viewer</title>
+  <link href="tsviewdb.css" rel="stylesheet">
+  <meta content="Performance data visualization." name="description">
+  <link href="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/themes/base/jquery-ui.css" rel="stylesheet">
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.9.1/jquery-ui.min.js"></script>
+
+<div id="pageheader">
+    <div class="logo">
+      <div id="tsview-title">
+        TSViewDB
+      </div>
+    </div>
+
+    <div id="headerlinks">
+      <a href="//github.com/google/tsviewdb">Help</a>
+    </div>
+
+    <div id="search-div">
+      <form id="search-form" action="search" method="get" title=
+      "Type &lt;benchmark substring&gt;/&lt;experiment substring&gt; for data source search. Type +benchmark/experiment to go directly to graph (comma-separated list for more than one).">
+        Data Source Search: <input type="text" id="search-input-box" name="q" size="40"> <span id="spinner" style="display:none;">searching...</span>
+      </form>
+    </div>
+  </div><br>
+  <script src="search_box_handler-compiled.js"></script>
