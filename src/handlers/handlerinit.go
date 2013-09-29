@@ -64,6 +64,7 @@ func initCaches(d db.DB) {
 func InitializeAndRegister(d db.DB) {
 	templateloader.LoadTemplates(*resourceDir)
 	initCaches(d)
+	rangecontent.SetFontDir(filepath.Join(*resourceDir, "fonts"))
 
 	srcHandler := &SrcHandler{D: d}
 	http.Handle(common.SrcPath, srcHandler)

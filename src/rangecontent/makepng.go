@@ -33,6 +33,10 @@ const (
 	defaultPngHeight = 3.0 // Inches
 )
 
+func SetFontDir(fontDir string) {
+	png.SetFontDir(fontDir)
+}
+
 func MakeSrcsPngContent(d db.DB, b *bytes.Buffer, rawQuery string) error {
 	dTable, err := getDataTable(d, rawQuery)
 	if err != nil {

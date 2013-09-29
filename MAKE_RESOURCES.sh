@@ -17,8 +17,8 @@ TSVIEWDBROOT=${TSVIEWDBROOT:=$GOPATH/src/github.com/google/tsviewdb}
 mkdir -p $TSVIEWDBROOT/resources
 TOOLSDIR=$TSVIEWDBROOT/third_party_tools
 
-mkdir -p $TSVIEWDBROOT/fonts
-cp $GOPATH/src/code.google.com/p/plotinum/vg/fonts/* $TSVIEWDBROOT/fonts/
+mkdir -p $TSVIEWDBROOT/resources/fonts
+cp $GOPATH/src/code.google.com/p/plotinum/vg/fonts/* $TSVIEWDBROOT/resources/fonts
 
 cd $TSVIEWDBROOT/resources_src
 

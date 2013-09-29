@@ -30,8 +30,11 @@ import (
 	"image/color"
 	"math"
 	"strings"
+	"sync"
 	"time"
 )
+
+var once sync.Once
 
 func drawPng(b *bytes.Buffer, p *plot.Plot, width, height float64) {
 	w, h := vg.Inches(width), vg.Inches(height)
@@ -53,8 +56,6 @@ func getLayout(min, max int64) string {
 		return layoutMonths
 	case diff > monthMillis:
 		return layoutDays
-	// case diff > dayMillis:
-	// 	return layoutHours
 	case diff > hourMillis:
 		return layoutMinutes
 	default:
@@ -74,9 +75,8 @@ const (
 	yearMillis  = dayMillis * 365
 
 	// Mon Jan 2 15:04:05 -0700 MST 2006
-	layoutMonths = "Jan06"
-	layoutDays   = "02Jan06"
-	// layoutHours   = "02Jan06-15"
+	layoutMonths  = "Jan06"
+	layoutDays    = "02Jan06"
 	layoutMinutes = "02Jan-15:04"
 	layoutSeconds = "15:04:05"
 )
@@ -133,6 +133,12 @@ func TimeTicks(min, max float64) (ticks []plot.Tick) {
 	return
 }
 
+func SetFontDir(fontDir string) {
+	once.Do(func() {
+		vg.FontDirs = []string{fontDir}
+	})
+}
+
 func DataTableToPng(b *bytes.Buffer, dt *db.DataTable, title string, width, height float64, xLabel string) error {
 	p, err := plot.New()
 	if err != nil {
@@ -141,11 +147,9 @@ func DataTableToPng(b *bytes.Buffer, dt *db.DataTable, title string, width, heig
 
 	p.Title.Text = title
 	p.X.Label.Text = xLabel
-	// p.X.Label.Text = "Record"
-	p.Y.Label.Text = "msec"
+	p.Y.Label.Text = "msec" // TODO: Fix this.
 
-	// FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX FIX
-	// FIX: need new ticker function to handle equalX (while keeping xLabel as selected)
+	// TODO: need new ticker function to handle equalX (while keeping xLabel as selected)
 	if xLabel == common.TimeName {
 		p.X.Tick.Marker = TimeTicks
 	}
@@ -154,15 +158,13 @@ func DataTableToPng(b *bytes.Buffer, dt *db.DataTable, title string, width, heig
 	numColumns := len(dt.ColumnNames)
 	lines := make([]plotter.XYs, numColumns-1) // Skip X column.
 
-	for rowNum, dRow := range dt.Data {
+	for _, dRow := range dt.Data {
 		xp := (*dRow)[0]
 		if xp != nil {
 			for col := 1; col < numColumns; col++ { // Skip X column.
 				yp := (*dRow)[col]
 				if yp != nil {
 					lines[col-1] = append(lines[col-1], struct{ X, Y float64 }{X: *xp, Y: *yp})
-					_ = rowNum
-					// lines[col-1] = append(lines[col-1], struct{ X, Y float64 }{X: float64(rowNum + 1), Y: *yp})
 				}
 			}
 		}
@@ -183,7 +185,6 @@ func DataTableToPng(b *bytes.Buffer, dt *db.DataTable, title string, width, heig
 			l.LineStyle.Color = colorList[i]
 			l.LineStyle.Width = vg.Points(1.5)
 		}
-		// l.LineStyle.Dashes = []vg.Length{vg.Points(5), vg.Points(5)}
 		p.Add(l)
 		p.Legend.Add(columnName, l)
 	}
@@ -210,12 +211,6 @@ func getColors(n int) []color.Color {
 		c := colorful.Hsv(h*360, s, v)
 		colorList[i] = c
 	}
-
-	// gen_html {
-	//   h += golden_ratio_conjugate
-	//   h %= 1
-	//   hsv_to_rgb(h, 0.5, 0.95)
-	// }
 
 	return colorList
 }
