@@ -4,12 +4,12 @@ TSViewDB
 ### *~ Under development: API or features may change. ~*
 
 ### Table Of Contents
-[Overview](#Overview)
-[Features](#Features)
-[Installation](#Installation)
-[Quick Start](#Quick_Start)
-[Additional Documentation](#Additional_Documentation)
-[License](#License)
+- [Overview](#Overview)
+- [Features](#Features)
+- [Installation](#Installation)
+- [Quick Start](#Quick_Start)
+- [Additional Documentation](#Additional_Documentation)
+- [License](#License)
 
 <a name="Overview"/a>
 Overview
@@ -146,7 +146,7 @@ Build From Source:
 ```
 
 <a name="make_resources"/>
-- Make resources
+- Make resources:
 
 ```sh
 $GOPATH/src/github.com/google/tsviewdb/MAKE_RESOURCES.sh
