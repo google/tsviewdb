@@ -17,13 +17,8 @@ limitations under the License.
 package regress
 
 import (
-	"github.com/davecgh/go-spew/spew"
-	"github.com/golang/glog"
 	"math"
 )
-
-var _ = spew.Dump
-var _ = glog.Infoln
 
 // Not using math.Min and math.Max because need to be fast more than correct.
 func minFloat64(a, b float64) float64 {

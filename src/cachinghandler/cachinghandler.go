@@ -101,12 +101,10 @@ type genFunction func(bf *bytes.Buffer) error
 func setCacheResult(dest groupcache.Sink, fill genFunction, zip bool) error {
 	glog.V(2).Infoln("Start content generation.")
 	var uncompressedContent *bytes.Buffer
-	// if *regenBufferPoolSize > 0 {
-	// 	uncompressedContent = bufferPool.Checkout()
-	// 	defer bufferPool.Release(uncompressedContent)
-	// } else {
+	// TODO: Use variable-sized buffer pool for uncompressedContent and content.
+	//       Already tried simple buffer bool for uncompressedContent without much
+	//       apparent latency benefit, but with large memory overhead.
 	uncompressedContent = &bytes.Buffer{}
-	// }
 
 	if err := fill(uncompressedContent); err != nil {
 		return err

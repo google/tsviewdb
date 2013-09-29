@@ -33,6 +33,7 @@ import (
 )
 
 const (
+	// TODO: Perhaps use http://golang.org/pkg/net/http/#MaxBytesReader instead.
 	maxInputSize = 2 << 24 // 16MB max input payload size for PUT or POST.
 )
 

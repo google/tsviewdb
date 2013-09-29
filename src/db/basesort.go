@@ -82,14 +82,6 @@ func (p *parallelStringsFloatTable) addColumn(colName string, col []*float64) {
 	}
 }
 
-// // swapColumnWithArray swaps the left-most column with the given array.
-// func (p *parallelStringsFloatTable) swapColumnWithArray(colName string, array []*float64) {
-// 	(*p.names)[0] = colName
-// 	for i := range p.data {
-// 		array[i], (*p.data[i])[0] = (*p.data[i])[0], array[i]
-// 	}
-// }
-
 // copyColumnToX copies the given column name to the 0 position and returns the
 // original in an array.  This is used for changing the X axis to an arbitrary
 // column and returning the original X axis as an array.

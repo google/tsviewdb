@@ -90,7 +90,7 @@ func (c *CassandraDB) ReadDir(req db.DirectorySearchRequest) (sInfo db.SourceInf
 }
 
 func (c *CassandraDB) WriteDir(si db.SourceInfoUncomp, src string) (err error) {
-	glog.V(2).Infoln("Start directory mutation for: " + src)
+	glog.V(3).Infoln("Start directory mutation for: " + src)
 	path, file := common.GetSrcComponents(src)
 	row := &gossie.Row{[]byte("/" + path), nil}
 
@@ -100,7 +100,7 @@ func (c *CassandraDB) WriteDir(si db.SourceInfoUncomp, src string) (err error) {
 	})
 
 	err = c.pool.Writer().Insert(dbcommon.CFChildren, row).Run()
-	glog.V(2).Infoln("Done directory mutation.")
+	glog.V(3).Infoln("Done directory mutation.")
 	return
 }
 
