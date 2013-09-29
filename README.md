@@ -126,7 +126,7 @@ bin/cassandra -f
 Either download an executable or build from source.
 
 Download executable:
-- Download: [FIX THIS LINK version 0.1](http://google.com)
+- Download: [releases](https://github.com/google/tsviewdb/releases)
 - Unpack:
 
 ```sh
