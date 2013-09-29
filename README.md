@@ -1,7 +1,7 @@
 
 TSViewDB
 ========
-## *~ Under development: API or features may change. ~*
+### *~ Under development: API or features may change. ~*
 
 Overview
 ---------
@@ -88,6 +88,7 @@ Features
 - Storing or analyzing only recent data (round-robin type databases are better fits).
 - Data analysis which requires rolling up (because not supported).
 
+<a name="Installation"/>
 Installation
 --------------
 1\. **Install and Setup Apache Cassandra**
@@ -116,13 +117,13 @@ Either download an executable or build from source.
 
 Download executable:
 - Download: [FIX THIS LINK version 0.1](http://google.com)
-- Unpack and start the server:
+- Unpack:
 
 ```sh
 tar xzf tsviewdb-$VERSION.tar.gz
-cd $HOME/tsviewdb-$VERSION
-bin/server -logtostderr
+export GOPATH=$HOME/tsviewdb-$VERSION
 ```
+- Follow instructions from [Make resources](#make_resources) below.
 
 Build From Source:
 - Install the Go Language: http://golang.org/doc/install
@@ -134,6 +135,13 @@ Build From Source:
   go get github.com/google/tsviewdb/server
 ```
 
+<a name="make_resources"/>
+- Make resources
+
+```sh
+$GOPATH/src/github.com/google/tsviewdb/MAKE_RESOURCES.sh
+```
+
 - Start the server:
 
 ```sh
@@ -143,14 +151,14 @@ bin/server -logtostderr
 
 Quick Start
 --------------
-Once the server is started (see [#Installation]), you can upload data.
+Make sure to start the server first (see [Installation](#Installation)).
 
-1\. Register a new data source.
+1\. Register a new data source: "testdir/testsubdir/testdata"
 
 ```sh
 curl -X PUT 'localhost:8080/src/v1/testdir/testsubdir/testdata'
 ```
-2\. Upload some data.
+2\. Upload some data to it.
 
 ```sh
 curl -X POST 'localhost:8080/src/v1/testdir/testsubdir/testdata' \
