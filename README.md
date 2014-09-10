@@ -202,6 +202,64 @@ Result should be something like:
 <a name="Additional_Documentation"/a>
 Additional Documentation
 ------------------------
+
+Points Record JSON
+------------------
+
+```json
+{
+  "name": "metricName",
+  "timestamps": [1410375175000, 1410375380000],
+  "data": [100.0, 128.0]
+}
+```
+
+| Key         | Description                                                                         |
+|:-----------:|:-----------------------------------------------------------------------------------:|
+| name        | **type**: string, Name for metric. Used as a trace in UI                            |
+| timestamps  | **type**: array[int64], Array of milliseconds since epoch timestamps. **(Optional)**|
+| data        | **type**: array[float64], Array of float values. Matches timestamps array length    |
+
+Write Record JSON
+-----------------
+A Write Record JSON consists of multiple PointsRecord, and some optional metadata about the record.
+
+```json
+{
+  "points": [
+    {
+      "name": "metricName1",
+      "timestamps": [1410375175000, 1410375380000],
+      "data": [100.0, 128.0]
+    },
+    {
+      "name": "metricName2",
+      "timestamps": [1410376670000, 1410376696000],
+      "data": [50.0, 87.0]
+    }
+  ],
+  "pointsDataType": "throughput",
+  "configPairs": {
+    "option1": "value1",
+    "option2": "value2",
+    "optoin3": "value3"
+  }
+}
+```
+| Key             | Description                                                                                    |
+|:---------------:|:----------------------------------------------------------------------------------------------:|
+| points          | **type**: array[PointsRecord]                                                                  |
+| pointsDataType  | **type**: string    Unit of metric (e.g. IOPS, rps, ms, etc)                                   |
+| configPairs     | **type**: map[string]string Key/Values pairs describing test configuration. Use for filtering. |          
+### Example
+```bash
+http POST http://localhost:8080/src/v1/test/subdir/blockio \
+  points:='[{"name": "random4KReadMix100", "data": [1200.0, 1250.0, 1100.0, 1500.0, 1450.0, 1275.0]},
+            {"name": "random4kReadMix0", "data": [1000.0, 1100.0, 900.0, 850.0, 1500.0, 1200.0]}]' \
+  configPairs:='{"ioScheduler": "CFQ", "os": "Ubuntu 14.04 LTS"}' \
+  pointsDataType="IOPS"
+```
+
 - [FIX THIS LINK to API doc](http://github.com/google/tsviewdb)
 - [FIX THIS LINK to API quick start](http://github.com/google/tsviewdb)
 
