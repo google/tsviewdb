@@ -249,15 +249,14 @@ A Write Record JSON consists of multiple PointsRecord, and some optional metadat
 | Key             | Description                                                                                    |
 |:---------------:|:----------------------------------------------------------------------------------------------:|
 | points          | **type**: array[PointsRecord]                                                                  |
-| pointsDataType  | **type**: string    Unit of metric (e.g. IOPS, rps, ms, etc)                                   |
+| pointsDataType  | **type**: string  data type (e.g. INT32, INT64, UINT64, string, etc)                           |
 | configPairs     | **type**: map[string]string Key/Values pairs describing test configuration. Use for filtering. |          
 ### Example
 ```bash
 http POST http://localhost:8080/src/v1/test/subdir/blockio \
-  points:='[{"name": "random4KReadMix100", "data": [1200.0, 1250.0, 1100.0, 1500.0, 1450.0, 1275.0]},
+  points:='[{"name": "random4KReadMix100", "data": [1200.0, 1250.0, 1100.0, 1500.0, 1450.0, 1275.0]},\
             {"name": "random4kReadMix0", "data": [1000.0, 1100.0, 900.0, 850.0, 1500.0, 1200.0]}]' \
-  configPairs:='{"ioScheduler": "CFQ", "os": "Ubuntu 14.04 LTS"}' \
-  pointsDataType="IOPS"
+  configPairs:='{"ioScheduler": "CFQ", "os": "Ubuntu 14.04 LTS"}'
 ```
 
 - [FIX THIS LINK to API doc](http://github.com/google/tsviewdb)
